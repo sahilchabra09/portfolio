@@ -1,9 +1,26 @@
-import Image from "next/image";
+"use client"
+
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
+import LoadingIntro from "@/components/LoadingIntro"
 
 export default function Home() {
+  const [showContent, setShowContent] = useState(false)
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <>
+      {!showContent && <LoadingIntro onComplete={() => setShowContent(true)} />}
+      
+      <AnimatePresence>
+        {showContent && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+            className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black"
+          >
+        <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <Image
           className="dark:invert"
           src="/next.svg"
@@ -60,6 +77,9 @@ export default function Home() {
           </a>
         </div>
       </main>
-    </div>
-  );
+    </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  )
 }
